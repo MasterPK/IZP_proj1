@@ -5,7 +5,7 @@
  * Projekt: Prace s textem, 1. projekt do IZP
  */
 
-//nacist knihovny
+//nacist knihovnysdfdsf
 
 #include <stdlib.h>
 #include <stdio.h>
