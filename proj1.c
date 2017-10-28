@@ -5,7 +5,7 @@
  * Projekt: Prace s textem, 1. projekt do IZP
  */
 
-//nacist knihovnysdfdsf
+//nacist knihovny
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -83,6 +83,8 @@ int main(int argc, char *argv[]){
 	int n=0;
 	int i=0;
 	int found=0;
+	int prefix_found=0;
+	int prefix_id=0;
 	while(i<cities_count){
 		if(strlen(cities[i])>strlen(input)){
 			int equal=1;
@@ -98,6 +100,8 @@ int main(int argc, char *argv[]){
 				z++;
 			}
 			if(equal==1){
+				prefix_found++;
+				prefix_id=i;
 				int exist=0;
 				for(int y=0;y<n;y++){
 					if(result_chars[y]==cities[i][z]){
@@ -126,7 +130,9 @@ int main(int argc, char *argv[]){
 		}
 		i++;
 	}
-	if(n>0){
+	if(prefix_found==1){
+		printf("Found: %s\n",cities[prefix_id]);
+	}else if(n>0){
 		char v;
 		for(int i=0;i<n;i++){
 			for(int z=0;z<n;z++){
