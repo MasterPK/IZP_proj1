@@ -38,17 +38,15 @@ void load_input(char *argv[], char *input){
 
 int main(int argc, char *argv[]){
 	int character = 0;
-	char cities[50][101];
+	char cities[42][101];
 	int cities_count=0;
 	int char_count=0;
 
 	int input_len=test_input(argc,argv);
 
-
 	char input[input_len];
 	
 	if(input_len!=0){
-
 		load_input(argv,input);
 	}else{
 		fprintf( stderr, "Warning: No input parameter detected!\n");
@@ -62,21 +60,26 @@ int main(int argc, char *argv[]){
 				fprintf( stderr, "Error: Cities input characters are not valid ASCII characters!\n");
 				return EXIT_FAILURE;
 			}
-			if(char_count<100){
+			if(char_count<100)
 				cities[cities_count][char_count]=character;
-				char_count++;
-			}
+			char_count++;
 			character=toupper(getchar());
 		}
 		if(char_count>100){
 			//printf("%c",cities[cities_count][100]);
 			//printf("%d",char_count);
 			cities[cities_count][100]='\0';
+			fprintf( stderr, "Warning: Some of city name is longer than 100 characters! Rest of characters will be dropped!\n");
 		}else{
 			cities[cities_count][char_count]='\0';
 		}
 		char_count=0;
 		cities_count++;
+	}
+
+	if(cities_count>42){
+		fprintf( stderr, "Error: Cities count is bigger than 42! Program won't accept it!\n");
+		return EXIT_FAILURE;
 	}
 
 	char result_chars[cities_count];
