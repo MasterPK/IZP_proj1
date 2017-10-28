@@ -31,27 +31,10 @@ void load_input(char *argv[], char *input){
 	input[a]='\0';
 }
 
-/*int load_cities(char *cities[]){
-
-	return 0;
-}*/
-
-int main(int argc, char *argv[]){
+int load_cities(char cities[42][101]){
 	int character = 0;
-	char cities[42][101];
-	int cities_count=0;
 	int char_count=0;
-
-	int input_len=test_input(argc,argv);
-
-	char input[input_len];
-	
-	if(input_len!=0){
-		load_input(argv,input);
-	}else{
-		fprintf( stderr, "Warning: No input parameter detected!\n");
-	}
-	
+	int cities_count=0;
 
 	while((character=toupper(getchar()))!=EOF){
 		while(character!='\n'){
@@ -76,6 +59,27 @@ int main(int argc, char *argv[]){
 		char_count=0;
 		cities_count++;
 	}
+	return cities_count;
+}
+
+int main(int argc, char *argv[]){
+	
+	char cities[42][101];
+	int cities_count=0;
+	
+
+	int input_len=test_input(argc,argv);
+
+	char input[input_len];
+	
+	if(input_len!=0){
+		load_input(argv,input);
+	}else{
+		fprintf( stderr, "Warning: No input parameter detected!\n");
+	}
+	
+
+	cities_count=load_cities(cities);
 
 	if(cities_count>42){
 		fprintf( stderr, "Error: Cities count is bigger than 42! Program won't accept it!\n");
