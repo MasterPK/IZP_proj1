@@ -39,9 +39,7 @@ int load_cities(char cities[42][101]){
 	while((character=toupper(getchar()))!=EOF){
 		while(character!='\n'){
 			if(!(character>31 && character<127)){
-				printf("%c",character);
-				fprintf( stderr, "Error: Cities input characters are not valid ASCII characters!\n");
-				return EXIT_FAILURE;
+				return -1;
 			}
 			if(char_count<100)
 				cities[cities_count][char_count]=character;
@@ -49,8 +47,6 @@ int load_cities(char cities[42][101]){
 			character=toupper(getchar());
 		}
 		if(char_count>100){
-			//printf("%c",cities[cities_count][100]);
-			//printf("%d",char_count);
 			cities[cities_count][100]='\0';
 			fprintf( stderr, "Warning: Some of city name is longer than 100 characters! Rest of characters will be dropped!\n");
 		}else{
@@ -84,7 +80,11 @@ int main(int argc, char *argv[]){
 	if(cities_count>42){
 		fprintf( stderr, "Error: Cities count is bigger than 42! Program won't accept it!\n");
 		return EXIT_FAILURE;
+	}else if(cities_count==-1){
+		fprintf( stderr, "Error: Cities input characters are not valid ASCII characters!\n");
+		return EXIT_FAILURE;
 	}
+
 
 	char result_chars[cities_count];
 	int n=0;
