@@ -16,8 +16,8 @@ int test_input(int argc, char *argv[]){
 	int input_len=0;
 	if(argc==2 && argv[1]!=NULL){
 		input_len=strlen((argv[1]));
-	}else{
-		return 0;
+	}else if(argc>2){
+		return -1;
 	}
 	return input_len;
 }
@@ -48,7 +48,7 @@ int load_cities(char cities[42][101]){
 		}
 		if(char_count>100){
 			cities[cities_count][100]='\0';
-			fprintf( stderr, "Warning: Some of city name is longer than 100 characters! Rest of characters will be dropped!\n");
+			fprintf( stderr, "Warning: Some of city name is longer than 100 characters! Rest of characters in that name will be dropped!\n");
 		}else{
 			cities[cities_count][char_count]='\0';
 		}
@@ -58,7 +58,7 @@ int load_cities(char cities[42][101]){
 	return cities_count;
 }
 
-void print_results(char *result_chars, int result_count){
+void sort(char *result_chars, int result_count){
 	char v;
 	for(int i=0;i<result_count;i++){
 		for(int z=0;z<result_count;z++){
@@ -69,6 +69,9 @@ void print_results(char *result_chars, int result_count){
 			}
 		}
 	}
+}
+
+void print_enable(char *result_chars, int result_count){
 	printf("Enable: ");
 	for(int i=0;i<result_count;i++){
 		if(result_chars[i]==32)
@@ -84,17 +87,19 @@ int main(int argc, char *argv[]){
 	char cities[42][101];
 	int cities_count=0;
 	
-
 	int input_len=test_input(argc,argv);
 
 	char input[input_len];
-	
-	if(input_len!=0){
+
+	if(input_len>0){
 		load_input(argv,input);
+	}else if(input_len==-1){
+		fprintf( stderr, "Error: Invalid input!\n");
+		return EXIT_FAILURE;
 	}else{
-		fprintf( stderr, "Warning: No input parameter detected!\n");
+		fprintf( stderr, "Warning: No input parametr detected!\n");
 	}
-	
+
 
 	cities_count=load_cities(cities);
 
@@ -102,7 +107,7 @@ int main(int argc, char *argv[]){
 		fprintf( stderr, "Error: Cities count is bigger than 42! Program won't accept it!\n");
 		return EXIT_FAILURE;
 	}else if(cities_count==-1){
-		fprintf( stderr, "Error: Cities input characters are not valid ASCII characters!\n");
+		fprintf( stderr, "Error: Cities input is not valid ASCII characters!\n");
 		return EXIT_FAILURE;
 	}
 
@@ -160,8 +165,11 @@ int main(int argc, char *argv[]){
 	}
 	if(prefix_found==1){
 		printf("Found: %s\n",cities[prefix_id]);
+		sort(result_chars,result_count);
+		print_enable(result_chars,result_count);
 	}else if(result_count>0){
-		print_results(result_chars,result_count);
+		sort(result_chars,result_count);
+		print_enable(result_chars,result_count);
 	}else if(found==0){
 		printf("Not found\n");
 	}
