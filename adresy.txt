@@ -1,8 +1,9 @@
 Praha
-Br a~
+Br
 Brno
 Bratislava
 Bruntal
 BruntalA
 Bransouze
-YmestoSviceNEZ100znakyVnazvuabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789abcdefgijklm
+YmestoSviceNEZ100znakyVnazvuabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789abcdefgijkla
+Jihlava
