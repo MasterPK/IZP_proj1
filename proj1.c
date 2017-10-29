@@ -58,6 +58,27 @@ int load_cities(char cities[42][101]){
 	return cities_count;
 }
 
+void print_results(char *result_chars, int result_count){
+	char v;
+	for(int i=0;i<result_count;i++){
+		for(int z=0;z<result_count;z++){
+			if(result_chars[i]<result_chars[z]){
+				v=result_chars[i];
+				result_chars[i]=result_chars[z];
+				result_chars[z]=v;
+			}
+		}
+	}
+	printf("Enable: ");
+	for(int i=0;i<result_count;i++){
+		if(result_chars[i]==32)
+			printf("(SPACE)");
+		else
+			printf("%c",result_chars[i]);
+	}
+	printf("\n");
+}
+
 int main(int argc, char *argv[]){
 	
 	char cities[42][101];
@@ -87,7 +108,7 @@ int main(int argc, char *argv[]){
 
 
 	char result_chars[cities_count];
-	int n=0;
+	int result_count=0;
 	int i=0;
 	int found=0;
 	int prefix_found=0;
@@ -110,14 +131,14 @@ int main(int argc, char *argv[]){
 				prefix_found++;
 				prefix_id=i;
 				int exist=0;
-				for(int y=0;y<n;y++){
+				for(int y=0;y<result_count;y++){
 					if(result_chars[y]==cities[i][z]){
 						exist=1;
 						break;
 					}
 				}
 				if(exist==0)
-					result_chars[n++]=cities[i][z];
+					result_chars[result_count++]=cities[i][z];
 			}
 		}else if(strlen(cities[i])==strlen(input)){
 			int equal=1;
@@ -139,25 +160,8 @@ int main(int argc, char *argv[]){
 	}
 	if(prefix_found==1){
 		printf("Found: %s\n",cities[prefix_id]);
-	}else if(n>0){
-		char v;
-		for(int i=0;i<n;i++){
-			for(int z=0;z<n;z++){
-				if(result_chars[i]<result_chars[z]){
-					v=result_chars[i];
-					result_chars[i]=result_chars[z];
-					result_chars[z]=v;
-				}
-			}
-		}
-		printf("Enable: ");
-		for(int i=0;i<n;i++){
-			if(result_chars[i]==32)
-				printf("(SPACE)");
-			else
-				printf("%c",result_chars[i]);
-		}
-		printf("\n");
+	}else if(result_count>0){
+		print_results(result_chars,result_count);
 	}else if(found==0){
 		printf("Not found\n");
 	}
