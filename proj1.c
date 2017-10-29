@@ -1,16 +1,22 @@
 /*
- * Soubor:  proj1.c
- * Datum:   2017/10/15
- * Autor:   Petr Krehlik, xkrehl04
- * Projekt: Prace s textem, 1. projekt do IZP
+ * File:  proj1.c
+ * Date:   2017/10/15
+ * Author:   Petr Krehlik, xkrehl04
+ * Project: First project to IZP
  */
 
-//nacist knihovny
+//load libraries
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+
+/*test input is correct
+-1: err
+ 0: no arg
+>0: input length
+*/
 
 int test_input(int argc, char *argv[]){
 	int input_len=0;
@@ -22,6 +28,8 @@ int test_input(int argc, char *argv[]){
 	return input_len;
 }
 
+//load input to array
+
 void load_input(char *argv[], char *input){
 	unsigned int a=0;
 	while(a<strlen(argv[1])){
@@ -30,6 +38,10 @@ void load_input(char *argv[], char *input){
 	}
 	input[a]='\0';
 }
+
+/*load cities from input ot array
+return count of cities
+*/
 
 int load_cities(char cities[42][101]){
 	int character = 0;
@@ -58,6 +70,8 @@ int load_cities(char cities[42][101]){
 	return cities_count;
 }
 
+//sort array in alphabetical order
+
 void sort(char *result_chars, int result_count){
 	char v;
 	for(int i=0;i<result_count;i++){
@@ -71,6 +85,8 @@ void sort(char *result_chars, int result_count){
 	}
 }
 
+//print enabled chars
+
 void print_enable(char *result_chars, int result_count){
 	printf("Enable: ");
 	for(int i=0;i<result_count;i++){
@@ -83,7 +99,7 @@ void print_enable(char *result_chars, int result_count){
 }
 
 int main(int argc, char *argv[]){
-	
+	//variable init
 	char cities[42][101];
 	int cities_count=0;
 	
@@ -91,18 +107,20 @@ int main(int argc, char *argv[]){
 
 	char input[input_len];
 
+	// test of input length
 	if(input_len>0){
 		load_input(argv,input);
 	}else if(input_len==-1){
 		fprintf( stderr, "Error: Invalid input!\n");
 		return EXIT_FAILURE;
 	}else{
-		fprintf( stderr, "Warning: No input parametr detected!\n");
+		fprintf( stderr, "Warning: No input parameter detected!\n");
 	}
 
 
 	cities_count=load_cities(cities);
 
+	// test of cities count
 	if(cities_count>42){
 		fprintf( stderr, "Error: Cities count is bigger than 42! Program won't accept it!\n");
 		return EXIT_FAILURE;
@@ -118,7 +136,8 @@ int main(int argc, char *argv[]){
 	int found=0;
 	int prefix_found=0;
 	int prefix_id=0;
-	while(i<cities_count){
+	// main processing cycle
+	while(i<cities_count){	//
 		if(strlen(cities[i])>strlen(input)){
 			int equal=1;
 			int z=0;
