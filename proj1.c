@@ -90,9 +90,9 @@ void sort(char *result_chars, int result_count){
 void print_enable(char *result_chars, int result_count){
 	printf("Enable: ");
 	for(int i=0;i<result_count;i++){
-		if(result_chars[i]==32)
-			printf("(SPACE)");
-		else
+		//if(result_chars[i]==32)
+			//printf("(SPACE)");
+		//else
 			printf("%c",result_chars[i]);
 	}
 	printf("\n");
