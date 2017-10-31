@@ -17,7 +17,7 @@
  0: no arg
 >0: input length
 */
-
+//plýtvání místem!!!
 int test_input(int argc, char *argv[]){
 	int input_len=0;
 	if(argc==2 && argv[1]!=NULL){
@@ -91,14 +91,18 @@ void print_enable(char *result_chars, int result_count){
 	printf("Enable: ");
 	for(int i=0;i<result_count;i++){
 		//if(result_chars[i]==32)
-			//printf("(SPACE)");
+		//	printf("(SPACE)");
 		//else
-			printf("%c",result_chars[i]);
+		printf("%c",result_chars[i]);
 	}
 	printf("\n");
 }
 
 int main(int argc, char *argv[]){
+	//další dekompozice
+	//zrušit dvourozměrné pole
+	//zrušit řazení
+
 	//variable init
 	char cities[42][101];
 	int cities_count=0;
@@ -128,8 +132,6 @@ int main(int argc, char *argv[]){
 		fprintf( stderr, "Error: Cities input is not valid ASCII characters!\n");
 		return EXIT_FAILURE;
 	}
-
-
 	char result_chars[cities_count];
 	int result_count=0;
 	int i=0;
@@ -137,6 +139,7 @@ int main(int argc, char *argv[]){
 	int prefix_found=0;
 	int prefix_id=0;
 	// main processing cycle
+	// lépe rozvrhnout
 	while(i<cities_count){	//
 		if(strlen(cities[i])>strlen(input)){
 			int equal=1;
@@ -182,10 +185,13 @@ int main(int argc, char *argv[]){
 		}
 		i++;
 	}
+	//do funkce
 	if(prefix_found==1){
 		printf("Found: %s\n",cities[prefix_id]);
-		sort(result_chars,result_count);
-		print_enable(result_chars,result_count);
+		if(prefix_found>1){
+			sort(result_chars,result_count);
+			print_enable(result_chars,result_count);
+		}
 	}else if(result_count>0){
 		sort(result_chars,result_count);
 		print_enable(result_chars,result_count);
