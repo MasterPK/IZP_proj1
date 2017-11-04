@@ -47,6 +47,7 @@ int load_cities(char cities[42][101]){
 	int character = 0;
 	int char_count=0;
 	int cities_count=0;
+	int long_name=0;
 
 	while((character=toupper(getchar()))!=EOF){
 		while(character!='\n'){
@@ -60,7 +61,10 @@ int load_cities(char cities[42][101]){
 		}
 		if(char_count>100){
 			cities[cities_count][100]='\0';
-			fprintf( stderr, "Warning: Some of city name is longer than 100 characters! Rest of characters in that name will be dropped!\n");
+			if(long_name==0){
+				fprintf( stderr, "Warning: Some of city name is longer than 100 characters! Rest of characters in that name will be dropped!\n");
+				long_name=1;
+			}
 		}else{
 			cities[cities_count][char_count]='\0';
 		}
@@ -90,10 +94,7 @@ void sort(char *result_chars, int result_count){
 void print_enable(char *result_chars, int result_count){
 	printf("Enable: ");
 	for(int i=0;i<result_count;i++){
-		if(result_chars[i]==32)
-			printf("(SPACE)");
-		else
-			printf("%c",result_chars[i]);
+		printf("%c",result_chars[i]);
 	}
 	printf("\n");
 }
@@ -138,7 +139,22 @@ int main(int argc, char *argv[]){
 	int prefix_id=0;
 	// main processing cycle
 	while(i<cities_count){	//
-		if(strlen(cities[i])>strlen(input)){
+		if(strlen(cities[i])==strlen(input)){
+			int equal=1;
+			int z=0;
+			while(cities[i][z]!='\0'){
+				if(input[z]==cities[i][z]){
+				}else{
+					equal=0;
+					break;
+				}
+				z++;
+			}
+			if(equal==1 && input_len!=0 && found==0){
+				found=1;
+				printf("Found: %s\n",input);
+			}
+		}else if(strlen(cities[i])>strlen(input)){
 			int equal=1;
 			int z=0;
 
@@ -164,28 +180,11 @@ int main(int argc, char *argv[]){
 				if(exist==0)
 					result_chars[result_count++]=cities[i][z];
 			}
-		}else if(strlen(cities[i])==strlen(input)){
-			int equal=1;
-			int z=0;
-			while(cities[i][z]!='\0'){
-				if(input[z]==cities[i][z]){
-				}else{
-					equal=0;
-					break;
-				}
-				z++;
-			}
-			if(equal==1 && input_len!=0){
-				found=1;
-				printf("Found: %s\n",input);
-			}
 		}
 		i++;
 	}
-	if(prefix_found==1){
+	if(prefix_found==1 && found==0){
 		printf("Found: %s\n",cities[prefix_id]);
-		sort(result_chars,result_count);
-		print_enable(result_chars,result_count);
 	}else if(result_count>0){
 		sort(result_chars,result_count);
 		print_enable(result_chars,result_count);
