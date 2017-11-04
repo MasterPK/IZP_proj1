@@ -39,64 +39,89 @@ void load_input(char *argv[], char *input){
 	input[a]='\0';
 }
 
-/*load cities from input ot array
-return count of cities
+/*process line by line
+-1:none found
+ 0:found
+ 1:prefix found
 */
+int process_line(char *line, short int *result_chars, char *input){
+	printf("%s\n",line);
+	if(strlen(line)>strlen(input)){
+		int equal=1;
+		int z=0;
 
-int load_cities(char cities[42][101]){
-	int character = 0;
-	int char_count=0;
-	int cities_count=0;
-
-	while((character=toupper(getchar()))!=EOF){
-		while(character!='\n'){
-			if(!(character>31 && character<127)){
+		while(input[z]!='\0'){
+			if(input[z]!=line[z]){
+				equal=0;
 				return -1;
 			}
-			if(char_count<100)
-				cities[cities_count][char_count]=character;
-			char_count++;
-			character=toupper(getchar());
+			z++;
 		}
-		if(char_count>100){
-			cities[cities_count][100]='\0';
-			fprintf( stderr, "Warning: Some of city name is longer than 100 characters! Rest of characters in that name will be dropped!\n");
-		}else{
-			cities[cities_count][char_count]='\0';
-		}
-		char_count=0;
-		cities_count++;
-	}
-	return cities_count;
-}
-
-//sort array in alphabetical order
-
-void sort(char *result_chars, int result_count){
-	char v;
-	for(int i=0;i<result_count;i++){
-		for(int z=0;z<result_count;z++){
-			if(result_chars[i]<result_chars[z]){
-				v=result_chars[i];
-				result_chars[i]=result_chars[z];
-				result_chars[z]=v;
+		if(equal==1){
+			int position=(int)line[z]-32;
+			if(position>=97 && position<=122){
+				position=position-32;
 			}
+			result_chars[position]=1;
+			return 1;
+		}
+
+	}else if(strlen(line)==strlen(input)){
+		int equal=1;
+		int z=0;
+		while(line[z]!='\0'){
+			if(input[z]!=line[z]){
+				equal=0;
+				return -1;
+			}
+			z++;
+		}
+		if(equal==1 && strlen(input)!=0){
+			printf("Found: %s\n",input);
+			return 0;
 		}
 	}
+	return -1;
 }
 
-//print enabled chars
+/*nacte radek
+pokud neni co cist vrati chybu
+*/
 
-void print_enable(char *result_chars, int result_count){
+int load_line(char *line){
+	if(scanf("%100s[^\n]",line)==EOF){
+		return EXIT_FAILURE;
+	}else{
+		return EXIT_SUCCESS;
+	}
+	
+}
+
+
+void print_enable(short int *result_chars){
 	printf("Enable: ");
-	for(int i=0;i<result_count;i++){
-		//if(result_chars[i]==32)
-		//	printf("(SPACE)");
-		//else
-		printf("%c",result_chars[i]);
+	for(int i=0;i<94;i++){
+		if(result_chars[i]==1)
+			printf("%d",i);
+			printf("%c",(char)i+32);
 	}
 	printf("\n");
 }
+
+void print_result(short int *result_chars, int prefix_found, char *prefix_value, int found){
+	if(prefix_found==1){
+		printf("Found: %s\n",prefix_value);
+		if(prefix_found>1){
+			print_enable(result_chars);
+		}
+	}else if(prefix_found>1){
+		print_enable(result_chars);
+	}else if(found==0){
+		printf("Not found\n");
+	}
+}
+
+
 
 int main(int argc, char *argv[]){
 	//další dekompozice
@@ -104,8 +129,6 @@ int main(int argc, char *argv[]){
 	//zrušit řazení
 
 	//variable init
-	char cities[42][101];
-	int cities_count=0;
 	
 	int input_len=test_input(argc,argv);
 
@@ -121,83 +144,47 @@ int main(int argc, char *argv[]){
 		fprintf( stderr, "Warning: No input parameter detected!\n");
 	}
 
+	int found=0;
+	int cities_count=0;
+	short int result_chars[95];
+	char line[101];
+	char prefix_value[101];
+	int prefix_found=0;
 
-	cities_count=load_cities(cities);
+	while(load_line(line)!=EXIT_FAILURE){
+		for(int i=0;i<100;i++){
+			line[i]=toupper(line[i]);
+		}
+		if(cities_count==42){
+			fprintf( stderr, "Error: Cities count is bigger than 42! Program won't accept it!\n");
+			return EXIT_FAILURE;
+		}
+		int vys = process_line(line,result_chars,input);
+		if(vys==1){
+			prefix_found++;
+			for(int i=0;i<100;i++)
+				prefix_value[i]=line[i];
+		}else if(vys==0){
+			found=1;
+		}
+
+	}
 
 	// test of cities count
-	if(cities_count>42){
-		fprintf( stderr, "Error: Cities count is bigger than 42! Program won't accept it!\n");
-		return EXIT_FAILURE;
-	}else if(cities_count==-1){
+	
+
+	/*}else if(cities_count==-1){
 		fprintf( stderr, "Error: Cities input is not valid ASCII characters!\n");
 		return EXIT_FAILURE;
-	}
-	char result_chars[cities_count];
-	int result_count=0;
-	int i=0;
-	int found=0;
-	int prefix_found=0;
-	int prefix_id=0;
-	// main processing cycle
+	}*/
+	
+
+
 	// lépe rozvrhnout
-	while(i<cities_count){	//
-		if(strlen(cities[i])>strlen(input)){
-			int equal=1;
-			int z=0;
 
-			while(input[z]!='\0'){
-
-				if(input[z]==cities[i][z]){
-				}else{
-					equal=0;
-					break;
-				}
-				z++;
-			}
-			if(equal==1){
-				prefix_found++;
-				prefix_id=i;
-				int exist=0;
-				for(int y=0;y<result_count;y++){
-					if(result_chars[y]==cities[i][z]){
-						exist=1;
-						break;
-					}
-				}
-				if(exist==0)
-					result_chars[result_count++]=cities[i][z];
-			}
-		}else if(strlen(cities[i])==strlen(input)){
-			int equal=1;
-			int z=0;
-			while(cities[i][z]!='\0'){
-				if(input[z]==cities[i][z]){
-				}else{
-					equal=0;
-					break;
-				}
-				z++;
-			}
-			if(equal==1 && input_len!=0){
-				found=1;
-				printf("Found: %s\n",input);
-			}
-		}
-		i++;
-	}
 	//do funkce
-	if(prefix_found==1){
-		printf("Found: %s\n",cities[prefix_id]);
-		if(prefix_found>1){
-			sort(result_chars,result_count);
-			print_enable(result_chars,result_count);
-		}
-	}else if(result_count>0){
-		sort(result_chars,result_count);
-		print_enable(result_chars,result_count);
-	}else if(found==0){
-		printf("Not found\n");
-	}
+	print_result(result_chars,prefix_found,prefix_value,found);
+	
 
 	return EXIT_SUCCESS;
 }
