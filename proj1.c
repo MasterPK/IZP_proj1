@@ -143,8 +143,7 @@ int main(int argc, char *argv[]){
 			int equal=1;
 			int z=0;
 			while(cities[i][z]!='\0'){
-				if(input[z]==cities[i][z]){
-				}else{
+				if(input[z]!=cities[i][z]){
 					equal=0;
 					break;
 				}
@@ -160,8 +159,7 @@ int main(int argc, char *argv[]){
 
 			while(input[z]!='\0'){
 
-				if(input[z]==cities[i][z]){
-				}else{
+				if(input[z]!=cities[i][z]){
 					equal=0;
 					break;
 				}
