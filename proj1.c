@@ -131,7 +131,7 @@ int main(int argc, char *argv[]){
 	}
 
 
-	char result_chars[cities_count];
+	char result_chars[cities_count+1];
 	int result_count=0;
 	int i=0;
 	int found=0;
